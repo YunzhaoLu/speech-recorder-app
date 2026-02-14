@@ -51,7 +51,7 @@ class AudioRecorder {
         .map((f) => Recording(
               path: f.path,
               fileName: f.path.split('/').last,
-              lastModified: f.lastModifiedSync(),
+              lastModified: f.statSync().modified,
               sizeBytes: f.statSync().size,
             ))
         .toList()
