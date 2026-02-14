@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:record/record.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -21,7 +20,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
         useMaterial3: true,
-        cardTheme: CardTheme(
+        cardTheme: CardThemeData(
           elevation: 2,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
@@ -41,7 +40,7 @@ class RecorderPage extends StatefulWidget {
 }
 
 class _RecorderPageState extends State<RecorderPage> {
-  final AudioRecorder _recorder = AudioRecorder();
+  final RecorderManager _recorder = RecorderManager();
   final AudioPlayer _audioPlayer = AudioPlayer();
   bool _isRecording = false;
   String? _currentPath;
@@ -77,7 +76,6 @@ class _RecorderPageState extends State<RecorderPage> {
       });
       await _loadRecordings();
     } else {
-      await _recorder.stopRecording(); // Stop any currently playing audio
       await _audioPlayer.stop();
 
       final path = await _recorder.startRecording();
@@ -335,15 +333,14 @@ class _RecorderPageState extends State<RecorderPage> {
                 if (_isRecording)
                   Text(
                     'Recording...',
-                    style: Theme.of(context).textTheme.headline6,
-                    style: TextStyle(
+                    style: Theme.of(context).textTheme.titleLarge.copyWith(
                       color: _isRecording ? Colors.red : Colors.green,
                     ),
                   )
                 else
                   Text(
                     'Tap to record',
-                    style: Theme.of(context).textTheme.headline6,
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
                 const SizedBox(height: 8),
                 if (_isRecording)
